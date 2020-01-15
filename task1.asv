@@ -1,0 +1,39 @@
+clc; clear;close all;
+%Program of slicing of images
+x=imread('l1.jpg');
+%imshow(x);
+y=rgb2gray(x);
+[r,c]=size(y);
+A = zeros(r,c,8);
+%Decimal to binary conversion
+for i=1:r
+    for j=1:c
+        A(i,j,:)=fliplr(de2bi(y(i,j),8));
+    end
+end
+subplot(3,3,1)
+imshow(y)
+% showing all the 8 planes separately.
+for i=1:8
+    subplot(3,3,i+1)
+    imshow(A(:,:,i))
+end
+b=zeros(r,c);
+%making lsb= zero
+A(:,:,end)=0;
+%decimal to binary conversion
+for i=1:r
+    for j=1:c
+        %for z=1:8
+            
+            b(i,j)=bi2de(fliplr(reshape(A(i,j,:),[1 8])));
+        %end
+    end
+end
+%conveting double into unit8
+b=uint8(b);
+figure
+subplot(1,2,1)
+imshow(y)
+subplot(1,2,2)
+imshow(b);
